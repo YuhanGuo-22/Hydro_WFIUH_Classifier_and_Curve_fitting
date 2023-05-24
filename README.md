@@ -1,6 +1,7 @@
 # Hydro_WFIUH_Classifier_and_Curve_fitting
 This repository contains codes that can classify or fit the width function IUH in hydrology  
-Plus: we have provided the WFIUH extraction code using pysheds(https://github.com/mdbartos/pysheds)
+
+Plus: we have provided the WFIUH extraction code using pysheds(https://github.com/mdbartos/pysheds)  
 see WFIUH_extraction_srtm_for_github.py   
 ### 1. for WFIUH curve fitting
 `pip install hydroeval`
