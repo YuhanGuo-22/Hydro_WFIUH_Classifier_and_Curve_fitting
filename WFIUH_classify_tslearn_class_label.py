@@ -19,31 +19,32 @@ def get_file_name(file_path, file_type):
                 filename.append(os.path.splitext(file)[0])
     return filename
 
-
 def cluster_wf(cluster_number, inputseries, savePath):
     # euclidean
     km = TimeSeriesKMeans(n_clusters=cluster_number, metric="euclidean", max_iter=5,
                           random_state=0).fit(inputseries)
     y_pred = km.fit_predict(inputseries)
-    print(y_pred)
-    print(km.cluster_centers_.shape)
+    # print(km.cluster_centers_.shape)
     # print(km.cluster_centers_)
+
     plt.figure()
     for yi in range(cluster_number):
         plt.subplot(2, 3, yi + 1)
+        # print(inputseries[y_pred == yi])
         for xx in inputseries[y_pred == yi]:
             plt.plot(xx.ravel(), color=(59 / 255, 66 / 255, 62 / 255), alpha=.1)
         # (162 / 255, 135 / 255, 166 / 255)
         # (92 / 255, 35 / 255, 102 / 255)
         plt.plot(km.cluster_centers_[yi].ravel(), color=(131 / 255, 5 / 255, 24 / 255))
-        plt.xlim(0, 100)
-        plt.ylim(0, 5)
+        plt.xlim(0, 30)
+        # plt.ylim(0, 5)
         plt.text(0.55, 0.85, 'Cluster %d' % (yi + 1),
                  transform=plt.gca().transAxes)
+    # Adjust layout to fit subplots and colorbar
+    plt.subplots_adjust(left=0.08, bottom=0.1, top=0.98, right=0.97, wspace=0.3, hspace=0.15)
     plt.savefig(savePath + str(cluster_number) + "_clusters_wf.jpg")
     plt.show()
     return km, y_pred
-
 
 def cluster_center_similarity(km, savePath):
     # Reshape cluster center to 2 dimensional
@@ -78,13 +79,14 @@ if __name__ == '__main__':
     # 1. read all hist wfiuh file
     file_path = "D:/"
     savePath = "D:/results/"
-    hist_nor_all = pd.read_csv(file_path + "hist_nor_all.csv")
+    hist_nor_all = pd.read_csv(file_path + "hist_nor_all.csv", header=None)
 
     # 2. classify the WFIUH
     # parameter setting and result meaning please see tslearn tutorials
     # https://tslearn.readthedocs.io/en/stable/gen_modules/clustering/tslearn.clustering.TimeSeriesKMeans.html
     cluster_number = 6
     # result 1: get cluster labels of each wfiuh
+    hist_nor_all = np.array(hist_nor_all)
     km, cluster_label = cluster_wf(cluster_number, hist_nor_all, savePath)
     print(cluster_label)
     # result 2:different clustering results plot with different cluster_number

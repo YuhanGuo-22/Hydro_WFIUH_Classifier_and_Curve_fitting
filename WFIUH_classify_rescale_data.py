@@ -18,7 +18,7 @@ def get_file_name(file_path, file_type):
     return filename
 
 
-def wf2pdf(WF_x, WF_y, interval=100, Tinv=0.03):
+def wf2pdf(WF_x, WF_y, interval=30, Tinv=0.03):
     # v = 30  # 单位为km/hour
     Total_wf_x = []
     for i in range(len(WF_x)):
@@ -65,7 +65,8 @@ if __name__ == '__main__':
         wfiuh = pd.read_csv(file_path + filename[n] + ".csv", engine='python', skiprows=0)
         wfiuh["flowTime_standard"] = wfiuh["flowTime"].apply(lambda x:  x / wfiuh["flowTime"].max())
         x = wfiuh["flowTime_standard"]
-        y = wfiuh["frequency"]
+        y = wfiuh["cells"]
+        # y = wfiuh["frequency"]
         hist_nor, bin_edge = wf2pdf(x, y)
         hist_nor_all.append(np.array(hist_nor).reshape((len(hist_nor), 1)))
         catName.append(filename[n].split("-")[0])
@@ -74,6 +75,7 @@ if __name__ == '__main__':
     print(hist_nor_all.shape)
 
     hist_nor_all_save = np.reshape(hist_nor_all, (hist_nor_all.shape[0], hist_nor_all.shape[1]))
+    print(hist_nor_all_save)
     np.savetxt(savePath + "hist_nor_all.csv", hist_nor_all_save, delimiter=",")
 
 
